@@ -15,6 +15,11 @@ component: () => import("../views/home.vue"),
     name: "community",
     component: () => import("../views/community.vue"),
     },
+{
+    path: "/sign",
+    name: "sign",
+    component: () => import("../views/sign.vue"),
+    },
 ]
 const router = new VueRouter({
 mode:'hash',

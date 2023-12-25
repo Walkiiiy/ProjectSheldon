@@ -1,16 +1,44 @@
 <template>
-  <div style="width: 100%; height: 100vh; background-color:rgb(50,50,50);">
+  <div>
+    <div style="z-index: 1;position: fixed; height: 100vh;  width:1.5vw;left: 0%; top: 0%; background-color:black; z-index: 1;"></div>
+  <div style="position: fixed; height: 2vh;  width:100vw;left: 0%; top: 0%; background-color:black;"></div>
+  <div style="z-index: 2; width: 100%; height: 100vh; background-color:rgb(36, 36, 36);">
   <div style="padding-left: 2%; padding-top: 1%; z-index: 1000;">
-    <textarea ref="Textarea" v-model="text" style="border-radius: 13px;width: 90vw; height: 70vh; background-color:darkslategray; color:white;padding: 2%; resize: none;"></textarea>
+    
+    <textarea ref="Titlearea" v-model="title" placeholder="题目：此处写下您的结论"
+    style="font-size:x-large; border-radius: 13px;width: 90vw; height: 3vh; background-color:darkslategray; color:white;padding: 2%; padding-top:1.25%;overflow: hidden; resize: none;"></textarea>
+
+    <textarea ref="Textarea" v-model="text" placeholder="正文：阐述您的预测理由"
+    style="border-radius: 13px;width: 90vw; height: 55vh; background-color:darkslategray; color:white;padding: 2%; resize: none;"></textarea>
+  
   </div>
+  <form class="category-form">
+        <label>
+            <input type="radio" name="category" value="政治" v-model="catrgory">
+            政治
+        </label>
+        <label>
+            <input type="radio" name="category" value="经济" v-model="catrgory">
+            经济
+        </label>
+        <label>
+            <input type="radio" name="category" value="社会" v-model="catrgory">
+            社会
+        </label>
+        <label>
+            <input type="radio" name="category" value="文化" v-model="catrgory">
+            文化
+        </label>
+    </form>
   <div style="position: absolute; right: 3%;">
-  <button class="rounded-button" @click="submit(0,text)">提交</button>
+  <button class="rounded-button" @click="submit()">提交</button>
   </div>
   <div v-if="card_is_shown" class="card" >
     <button class="close-btn" @click="card_is_shown=0">X</button>
     <div class="content">
-      <p>已提交，请耐心等待审核</p>
+      <p>{{ cardPrompt }}</p>
     </div>
+  </div>
   </div>
   </div>
 </template>
@@ -22,17 +50,11 @@ export default {
   data () {
     return {
       card_is_shown:0,
-      config: {
-        language: "zh_cn",//国际化
-        height:380,
-        width:1100,
-        events: {
-          'froalaEditor.initialized': function () {
-            console.log('initialized')
-          }
-        }
-      },
-      text: ''
+      userid:'',
+      catrgory:'',
+      title:'',
+      text: '',
+      cardPrompt:'',
     }
   },
   methods:{
@@ -49,21 +71,33 @@ export default {
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     },
-    submit(userId, articleContent){
+    submit(){
+      this.cardPrompt = '已提交，请等待审核！';
+      if (this.catrgory == '') {
+        this.cardPrompt = '请选择类别!';
+        this.card_is_shown=1;
+        return;
+      }
+      if (this.userid == '') {
+        this.cardPrompt = '请先登录!';
+        this.card_is_shown=1;
+        return;
+      }
 
       this.card_is_shown=1;
 
       const data = {
-        author: userId,
-        content: articleContent,
-        publish_time:this.getCurrentDateTimeForMySQL()
+        author_id:0,
+        content: this.text,
+        publish_time:this.getCurrentDateTimeForMySQL(),
+        category:this.catrgory,
+        title: this.title,
       };
 
       const ipAddress = '127.0.0.1';
       const port = '4000';
       // 拼接完整的 URL
       const apiUrl = `http://${ipAddress}:${port}/sbmit_article`;
-      console.log(this.model)
       axios.post(apiUrl, data)
         .then(function(response) {
             // 请求成功时的操作
@@ -76,12 +110,34 @@ export default {
       }
   },
   mounted(){
-    this.$refs.Textarea.focus();
+    this.$refs.Titlearea.focus();
   }
 }
 </script>
 <style>
+.category-form {
+    display: flex;
+    color:beige;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+    position:relative;
+    left: 2%;
+    top: 2%;
+    width: 70vh;
+}
+
+label {
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    margin-right: 5px;
+}
 .rounded-button {
+  position: relative;
+  bottom: 5vh;
   background-color:white;
   border: none;
   color:black; 
@@ -117,5 +173,8 @@ export default {
   position:absolute;
   top:5%;
   right:2%
+}
+textarea:focus {
+    outline: none;
 }
 </style>

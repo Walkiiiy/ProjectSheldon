@@ -19,7 +19,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'Zqp021025',
-  database: 'articles_db',
+  database: 'project_sheldon',
 });
 
 
@@ -34,7 +34,7 @@ db.connect(err => {
 // POST请求：插入文章数据
 app.post('/sbmit_article', (req, res) => {
   let article_data = req.body;
-  console.log(article_data)
+  console.log('post article:',article_data)
   let sql = 'INSERT INTO articles SET ?';
   db.query(sql, article_data, (err, result) => {
       if (err) {
@@ -43,6 +43,55 @@ app.post('/sbmit_article', (req, res) => {
           res.status(201).send({ message: "Article added successfully", id: result.insertId });
       }
   });
+});
+
+//get article
+app.get('/get_article', (req, res) => {
+    const articleId = req.query.article_id;
+    if (!articleId) {
+        return res.status(400).send('Article ID is required');
+    }
+
+    const query = 'SELECT * FROM articles WHERE article_id = ?';
+    db.query(query, [articleId], (err, results) => {
+        if (err) {
+            throw err;
+        }
+      console.log('get article:', results[0]);
+      res.send(results[0]);
+    });
+});
+
+//get tree list
+app.get('/getarticletree', (req, res) => {
+    const query = 'SELECT article_id, title, category FROM articles';
+    db.query(query, (err, results) => {
+        if (err) throw err;
+
+        // 构建分类到文章映射的树形结构
+        let tree = [];
+        let categories = ['政治', '经济', '社会', '文化'];
+
+        categories.forEach(category => {
+            let categoryNode = {
+                label: category,
+                children: []
+            };
+
+            results.forEach(article => {
+                if (article.category === category) {
+                    categoryNode.children.push({
+                        label: article.title,
+                        id: article.article_id,
+                    });
+                }
+            });
+
+            tree.push(categoryNode);
+        });
+      console.log(tree);
+        res.json(tree);
+    });
 });
 
 

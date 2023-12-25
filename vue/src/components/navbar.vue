@@ -1,5 +1,5 @@
 <template>
-    <ul class="navbar" style="background-color:rgb(20, 19, 19); color: aliceblue;">
+    <ul class="navbar" style="background-color:rgb(20, 19, 19); color: aliceblue; width: 100vw;">
         <li>
     <router-link to="/">/home</router-link>
         </li>
@@ -11,6 +11,9 @@
         </li>
         <li>
     <router-link to="/chart" >/chart</router-link>
+        </li>
+        <li style="position: fixed; right: 5vw;">
+    <router-link to="/sign" >/sign</router-link>
         </li>
     </ul>
 </template>

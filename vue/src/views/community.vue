@@ -6,7 +6,7 @@
   <tree @childEvent="handleEvent"/>
 </div>
 <div class="articles">
-  <viewer :article="article"/>
+  <viewer :article_id="article_id"/>
 </div>
 </div>
 </template>
@@ -16,7 +16,7 @@
   export default{
     data(){
       return{
-        article:'',
+        article_id:0,
       }
     },
     components:{
@@ -28,14 +28,14 @@
           },
     methods:{
       handleEvent(data) {
-          console.log('father componment event received:', data);
+          this.article_id=data;
         },
     }
     }
 </script>
 <style>
 .tree{
-    width:40%;
+    width:35%;
     height: 100%;
     background-color:darkslategray;
     position: absolute;
@@ -43,7 +43,7 @@
     z-index: 101;
 }
 .articles{
-    width:100%;
+    width:65%;
     height: 100%;
     background-color:rgb(50, 50, 50);
     position: absolute;

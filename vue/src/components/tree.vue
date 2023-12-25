@@ -16,7 +16,8 @@
   </template>
   
   <script>
-    import { Tree } from 'element-ui';
+    import axios from 'axios';
+import { Tree } from 'element-ui';
     export default {
       components: {
       [Tree.name]: Tree
@@ -26,19 +27,6 @@
       return {
         data: [
           {
-            label: "一级 1",
-            children: [
-              {
-                label: "二级 1-1",
-                children: [
-                  {
-                    label: "三级 1-1-1",
-                  },
-                ],
-              },
-            ],
-          },
-          {
             label: "一级 2",
             children: [
               {
@@ -46,6 +34,7 @@
                 children: [
                   {
                     label: "三级 2-1-1",
+                    id:1,
                   },
                 ],
               },
@@ -54,128 +43,7 @@
                 children: [
                   {
                     label: "三级 2-2-1",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            label: "一级 3",
-            children: [
-              {
-                label: "二级 3-1",
-                children: [
-                  {
-                    label: "三级 3-1-1",
-                  },
-                ],
-              },
-              {
-                label: "二级 3-2",
-                children: [
-                  {
-                    label: "三级 3-2-1",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            label: "一级 3",
-            children: [
-              {
-                label: "二级 3-1",
-                children: [
-                  {
-                    label: "三级 3-1-1",
-                  },
-                ],
-              },
-              {
-                label: "二级 3-2",
-                children: [
-                  {
-                    label: "三级 3-2-1",
-                  },
-                ],
-              },
-            ],
-          },{
-            label: "一级 3",
-            children: [
-              {
-                label: "二级 3-1",
-                children: [
-                  {
-                    label: "三级 3-1-1",
-                  },
-                ],
-              },
-              {
-                label: "二级 3-2",
-                children: [
-                  {
-                    label: "三级 3-2-1",
-                  },
-                ],
-              },
-            ],
-          },{
-            label: "一级 3",
-            children: [
-              {
-                label: "二级 3-1",
-                children: [
-                  {
-                    label: "三级 3-1-1",
-                  },
-                ],
-              },
-              {
-                label: "二级 3-2",
-                children: [
-                  {
-                    label: "三级 3-2-1",
-                  },
-                ],
-              },
-            ],
-          },{
-            label: "一级 3",
-            children: [
-              {
-                label: "二级 3-1",
-                children: [
-                  {
-                    label: "三级 3-1-1",
-                  },
-                ],
-              },
-              {
-                label: "二级 3-2",
-                children: [
-                  {
-                    label: "三级 3-2-1",
-                  },
-                ],
-              },
-            ],
-          },{
-            label: "一级 3",
-            children: [
-              {
-                label: "二级 3-1",
-                children: [
-                  {
-                    label: "三级 3-1-1",
-                  },
-                ],
-              },
-              {
-                label: "二级 3-2",
-                children: [
-                  {
-                    label: "三级 3-2-1",
+                    id:2,
                   },
                 ],
               },
@@ -189,15 +57,31 @@
       };
     },
     methods: {
-      sendEvent(label) {
-      this.$emit('childEvent', label);
+      sendEvent(id) {
+      this.$emit('childEvent', id);
     },
       handleNodeClick(data) {
         if(data.children==undefined){
-          this.sendEvent(data.label)
+          this.sendEvent(data.id)
         }
       },
+      getArticleTree(){
+        const ipAddress = '127.0.0.1';
+        const port = '4000';
+        // 拼接完整的 URL
+        const apiUrl = `http://${ipAddress}:${port}/getArticleTree`;
+        axios.get(apiUrl)
+        .then(Response=>{
+            this.data=Response.data;
+        })
+        .catch(error=>{
+          console.log('error while fetching articleTree!',error);
+        })
+      },
     },
+    mounted(){
+      this.getArticleTree();
+    }
   };
   </script>
   
