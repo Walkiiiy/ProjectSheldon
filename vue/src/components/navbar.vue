@@ -13,7 +13,7 @@
     <router-link to="/chart" >/chart</router-link>
         </li>
         <li style="position: fixed; right: 5vw;">
-    <router-link to="/sign" >/sign</router-link>
+    <router-link to="/signin" >/sign</router-link>
         </li>
     </ul>
 </template>

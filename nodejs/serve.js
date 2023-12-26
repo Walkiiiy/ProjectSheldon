@@ -1,6 +1,8 @@
 const express = require('express');
 const mysql=require('mysql');
 const fs = require('fs');
+const crypto = require('crypto');
+const { error } = require('console');
 
 const app = express();
 const port = 4000;
@@ -18,7 +20,7 @@ app.use(express.urlencoded({ extended: true })); // 用于解析application/x-ww
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Zqp021025',
+  password: '',
   database: 'project_sheldon',
 });
 
@@ -94,9 +96,74 @@ app.get('/getarticletree', (req, res) => {
     });
 });
 
+// 用户登录
+app.post('/userLogin', (req, res) => { 
+    userNmae = req.body.userNmae;
+    hashPassword = hashString(req.body.password);
+    const query = 'SELECT * FROM users WHERE username = ?';
+    db.query(query, [userNmae], (err, result) => {
+        if (err) {
+            res.status(500).send('Server Error');
+        }
+        else {
+            if (result.length === 0) {
+                console.log(`no such user ${userNmae}!`)
+                res.status(401).send('no such user!ask if sign up.');
+            }
+            else{
+                console.log(result[0].username);
+                if (result[0].password_hash == hashPassword) {
+                    console.log(`user ${userNmae} login`);
+                    res.send('user login successfully!');
+                } 
+                else {
+                    console.log(`user ${userNmae} tyied wrong password`);
+                    res.status(402).send('wrong password!');
+                }
+            }
+        }
+    });
+});
 
+//用户注册
+app.post('/userSignup', (req, res) => {
+    userNmae = req.body.userNmae;
+    hashPassword = hashString(req.body.password);
+    const query = 'SELECT * FROM users WHERE username = ?';
+    db.query(query, [userNmae], (err, result) => {
+        if (err) {
+            res.status(500).send('Server Error');
+        }
+        else {
+            if (result.length != 0) {
+                console.log('user tried to signup with duplicate name.');
+                res.status(409).send('user alreaady exists!');
+            }
+            else {
+                const newUser = {
+                    username: userNmae,
+                    password_hash: hashPassword
+                };
+                const query = 'INSERT INTO users SET ?';
+                db.query(query, newUser, (err, result) => {
+                    if (err) {
+                        res.status(500).send('Server Error');
+                    } 
+                    else {
+                        console.log(`user ${userNmae} signup!`);
+                        res.send('user signup successfully!');
+                    }
+                });
+            }
+        }
+    })    
+});
 
 // 启动服务器
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+function hashString(string) {
+    return crypto.createHash('sha256').update(string).digest('hex');
+}

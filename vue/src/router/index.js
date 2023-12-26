@@ -16,9 +16,14 @@ component: () => import("../views/home.vue"),
     component: () => import("../views/community.vue"),
     },
 {
-    path: "/sign",
-    name: "sign",
-    component: () => import("../views/sign.vue"),
+    path: "/signin",
+    name: "signin",
+    component: () => import("../views/signin.vue"),
+    },
+{
+    path: "/signup",
+    name: "signup",
+    component: () => import("../views/signup.vue"),
     },
 ]
 const router = new VueRouter({
