@@ -3,7 +3,7 @@ const mysql=require('mysql');
 const fs = require('fs');
 const crypto = require('crypto');
 const { error } = require('console');
-
+const session = require('express-session');
 const app = express();
 const port = 4000;
 //设置CORS
@@ -16,11 +16,20 @@ app.all('*',function (req, res, next) {
 
 app.use(express.json()); // 用于解析application/json类型的数据
 app.use(express.urlencoded({ extended: true })); // 用于解析application/x-www-form-urlencoded类型的数据
+app.use(session({
+    secret: 'ThisIsTheSessionKeyOfProjectsheldon', // 用于签名会话ID的秘钥
+    resave: false, // 强制保存会话即使没有变化
+    saveUninitialized: false, // 强制将未初始化的会话保存到存储中
+    cookie: { 
+        secure: false, // 当 secure 是 true 时，cookie 在 HTTP 中是无效的，在 HTTPS 中才有效
+        maxAge: 1000 * 60 * 60 * 24 // 设置 cookie 的过期时间，例如：24小时
+    }
+}));
 
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'Zqp021025',
   database: 'project_sheldon',
 });
 
@@ -91,7 +100,7 @@ app.get('/getarticletree', (req, res) => {
 
             tree.push(categoryNode);
         });
-      console.log(tree);
+    //   console.log(tree);
         res.json(tree);
     });
 });
@@ -115,6 +124,8 @@ app.post('/userLogin', (req, res) => {
                 if (result[0].password_hash == hashPassword) {
                     console.log(`user ${userNmae} login`);
                     res.send('user login successfully!');
+
+                    req.session.user = { userNmae };
                 } 
                 else {
                     console.log(`user ${userNmae} tyied wrong password`);

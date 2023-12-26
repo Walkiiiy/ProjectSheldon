@@ -15,7 +15,7 @@
     justify-content: center;
     align-items: center;">
     <p style="color: white;">password:</p>
-      <input v-model="password" style="width: 10vw; margin-left: 4%;">
+      <input type="password" v-model="password" style="width: 10vw; margin-left: 4%;">
     </div>
     <button @click="submit" style="width: 70%; margin-top: 5%; padding: 2%; ; border: none; border-radius: 5px;margin-bottom: 5%;">GO!</button>
     </div>

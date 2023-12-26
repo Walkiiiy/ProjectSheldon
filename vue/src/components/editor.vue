@@ -2,14 +2,14 @@
   <div>
     <div style="z-index: 1;position: fixed; height: 100vh;  width:1.5vw;left: 0%; top: 0%; background-color:black; z-index: 1;"></div>
   <div style="position: fixed; height: 2vh;  width:100vw;left: 0%; top: 0%; background-color:black;"></div>
-  <div style="z-index: 2; width: 100%; height: 100vh; background-color:rgb(36, 36, 36);">
+  <div style="z-index: 2; width: 100%; height: 100vh; background-color:black;">
   <div style="padding-left: 2%; padding-top: 1%; z-index: 1000;">
     
     <textarea ref="Titlearea" v-model="title" placeholder="题目：此处写下您的结论"
-    style="font-size:x-large; border-radius: 13px;width: 90vw; height: 3vh; background-color:darkslategray; color:white;padding: 2%; padding-top:1.25%;overflow: hidden; resize: none;"></textarea>
+    style="font-size:4vh; border-radius: 13px;width: 90vw; height: 3vh; background-color:rgb(33,33,33); color:white;padding: 2%;overflow: hidden; resize: none;"></textarea>
 
     <textarea ref="Textarea" v-model="text" placeholder="正文：阐述您的预测理由"
-    style="border-radius: 13px;width: 90vw; height: 55vh; background-color:darkslategray; color:white;padding: 2%; resize: none;"></textarea>
+    style="border-radius: 13px;width: 90vw; height: 55vh; background-color:rgb(33,33,33); color:white;padding: 2%; resize: none;font-size: 3vh;"></textarea>
   
   </div>
   <form class="category-form">
@@ -44,17 +44,17 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import { EventBus } from '@/eventBus';
 export default {
   name: 'app',
   data () {
     return {
       card_is_shown:0,
-      userid:'',
       catrgory:'',
       title:'',
       text: '',
-      cardPrompt:'',
+      cardPrompt: '',
     }
   },
   methods:{
@@ -78,16 +78,15 @@ export default {
         this.card_is_shown=1;
         return;
       }
-      if (this.userid == '') {
+      if (this.$globaldata.userName== '') {
         this.cardPrompt = '请先登录!';
+        console.log(this.$globaldata.userName);
         this.card_is_shown=1;
-        return;
+        return;  
       }
-
       this.card_is_shown=1;
-
       const data = {
-        author_id:0,
+        aruthor:this.$globaldata.userName,
         content: this.text,
         publish_time:this.getCurrentDateTimeForMySQL(),
         category:this.catrgory,
@@ -109,7 +108,7 @@ export default {
         });
       }
   },
-  mounted(){
+  mounted() {
     this.$refs.Titlearea.focus();
   }
 }

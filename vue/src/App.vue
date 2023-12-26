@@ -1,6 +1,6 @@
 <template>
 <div>
-<navbar/>
+<navbar :navbarShow="navbarShow"/>
 <div>
       <router-view/>
 </div>
@@ -11,21 +11,29 @@
   <script>
   import home from '/src/views/home.vue'
   import navbar from '/src/components/navbar.vue';
-    export default {
-        name: 'app',
-        data() {
-          return{}
-        },
-        computed: {
-    
-        },
-        components: {
-          home,
-          navbar,
-        },
-        mounted() {
+  import { EventBus } from './eventBus';
+  export default {
+    name: 'app',
+    data() {
+        return {
+        navbarShow:'/sign',
+      }
+    },
+    computed: {
+    },
+    components: {
+      home,
+      navbar,
+    },
+    mounted() {
+        EventBus.$on('signEvent', (data) => {
+          console.log('app.vue recieved log event.');
+            this.navbarShow = data;
+            this.$globaldata.userName = data;
+          });
     },
     beforeDestroy() {
+      EventBus.$off('signEvent');
     },
         methods: {
       },

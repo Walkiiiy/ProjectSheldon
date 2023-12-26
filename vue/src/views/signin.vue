@@ -15,7 +15,7 @@
     justify-content: center;
     align-items: center;">
     <p style="color: white;">password:</p>
-      <input v-model="password" style="width: 10vw; margin-left: 4%;">
+      <input type="password" v-model="password" style="width: 10vw; margin-left: 4%;">
     </div>
     <div>
     <button @click="submit" style="width: 70%; margin-top: 5%; padding: 2%; ; border: none; border-radius: 5px;margin-bottom: 2%;">GO!</button>
@@ -35,6 +35,7 @@
 <script>
 import axios from 'axios';
 import jsencrypt  from 'jsencrypt'
+import { EventBus } from '@/eventBus';
 export default {
   created() {
     document.body.style.overflow = 'hidden';
@@ -48,6 +49,9 @@ export default {
     }
   },
   methods: {
+    sendSigningMessage() {
+      EventBus.$emit('signEvent',this.userName);
+    },
 
     encryptPassword(password, publicKey) {
       const encryptor = new jsencrypt();
@@ -81,9 +85,11 @@ export default {
           console.log(Response);
           this.cardPrompt = '登录成功！';
           this.card_is_shown = 1;
+          this.sendSigningMessage();
         })
         .catch((error) => {
-           console.log(error.response.status);
+          throw error;
+          //  console.log(error.response.status);
           if (error.response.status==401){
             this.cardPrompt = '用户不存在！';
           }

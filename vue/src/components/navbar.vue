@@ -13,10 +13,23 @@
     <router-link to="/chart" >/chart</router-link>
         </li>
         <li style="position: fixed; right: 5vw;">
-    <router-link to="/signin" >/sign</router-link>
+    <router-link to="/signin">{{ navbarShow }}</router-link>
         </li>
     </ul>
 </template>
+<script>
+export default {
+    props: ['navbarShow'],
+    data() {
+        return {
+        }
+    },
+    methods: {
+    },
+    mounted() {
+    },
+}
+</script>
 <style scoped>
 /* 导航栏 */
 .navbar {
