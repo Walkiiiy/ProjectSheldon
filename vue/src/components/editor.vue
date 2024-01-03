@@ -1,7 +1,5 @@
 <template>
   <div>
-    <div style="z-index: 1;position: fixed; height: 100vh;  width:1.5vw;left: 0%; top: 0%; background-color:black; z-index: 1;"></div>
-  <div style="position: fixed; height: 2vh;  width:100vw;left: 0%; top: 0%; background-color:black;"></div>
   <div style="z-index: 2; width: 100%; height: 100vh; background-color:black;">
   <div style="padding-left: 2%; padding-top: 1%; z-index: 1000;">
     
@@ -152,7 +150,7 @@ input[type="radio"] {
 .card{
   z-index: 1001;
   position: absolute;
-  background-color:rgba(0,0,0,0.4);
+  background-color:rgba(0,0,0,0.8);
   top: 40%;
   right: 30%;
   height: 20%;

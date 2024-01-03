@@ -51,9 +51,20 @@ app.post('/sbmit_article', (req, res) => {
       if (err) {
           res.status(500).send({ message: "Error inserting article", error: err });
       } else {
-          res.status(201).send({ message: "Article added successfully", id: result.insertId });
+            user = article_data.aruthor;
+            const query = 'UPDATE users SET articleNum = articleNum + 1 WHERE username = ?';
+          db.query(query, [user], (err, result) => {
+              if (err) {
+                  res.status(500).send({ message: "Error updating user imformation", error: err });
+              }
+              else {
+                  res.status(201).send({ message: "Article added successfully", id: result.insertId });
+              }
+          });       
+          
       }
   });
+    
 });
 
 //get article
@@ -170,6 +181,19 @@ app.post('/userSignup', (req, res) => {
     })    
 });
 
+//获取统计图表数据请求
+app.get('/getChartData', (req,res) => {
+    const query = 'SELECT username,articleNum,correctNum FROM users'
+    db.query(query, (err, result) => {
+        if (err) {
+            res.status(500).send('Server Error');
+        }
+        else {
+            console.log('获取统计数据');
+            res.send(result);
+        }
+    })
+})
 // 启动服务器
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

@@ -25,6 +25,11 @@ component: () => import("../views/home.vue"),
     name: "signup",
     component: () => import("../views/signup.vue"),
     },
+{
+    path: "/chart",
+    name: "chart",
+    component: () => import("../views/chart.vue"),
+    },
 ]
 const router = new VueRouter({
 mode:'hash',

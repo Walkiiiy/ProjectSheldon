@@ -1,7 +1,5 @@
 <template>
 <div>
-<div style="position: absolute; height: 100vh;  width:5%;left: 0%; top: 0%; background-color:black;"></div>
-<div style="position: absolute; height: 2vh;  width:100vw;left: 0%; top: 0%; background-color:black;"></div>
 <div class="tree">
   <tree @childEvent="handleEvent"/>
 </div>

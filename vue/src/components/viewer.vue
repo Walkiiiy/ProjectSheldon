@@ -1,8 +1,10 @@
 <template>
-    <div style="margin-left: 5%;">
+    <div style="margin-left: 5%; margin-right: 5%;">
     <p  style="color: white; 
         font-size:x-large ;">{{ content.title }}</p>
-    <p  style="color: white;">{{ content.text }}</p>
+    <textarea readonly style="background-color:rgb(50,50,50); width: 60vw; height: 75vh;  border: none; resize: none; color:aliceblue; font-size: 3vh;">
+        {{ content.text }}
+    </textarea>
     </div>
 </template>
 <script>
@@ -42,4 +44,8 @@ export default{
 }
 </script>
 <style>
+::-webkit-scrollbar {
+    width: 0px;
+}
+
 </style>
