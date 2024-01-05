@@ -12,7 +12,7 @@
         <li>
     <router-link to="/chart" >/chart</router-link>
         </li>
-        <li style="position: fixed; right: 5vw;">
+        <li style="position: absolute; right: 5vw;">
     <router-link to="/signin">{{ navbarShow }}</router-link>
         </li>
     </ul>

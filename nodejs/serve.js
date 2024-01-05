@@ -4,6 +4,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const { error } = require('console');
 const session = require('express-session');
+const config = require('./config');
 const app = express();
 const port = 4000;
 //设置CORS
@@ -25,11 +26,10 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 // 设置 cookie 的过期时间，例如：24小时
     }
 }));
-
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Zqp021025',
+  password: config.password,
   database: 'project_sheldon',
 });
 
